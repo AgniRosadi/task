@@ -4,45 +4,45 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:supplier/helper/constant/shared_prefs_const.dart';
 import 'package:supplier/helper/ui/app_dialog.dart';
 import 'package:supplier/helper/utility/app_shared_prefs.dart';
 import 'package:supplier/model/master_model.dart';
 import 'package:supplier/provider/user_info_provider.dart';
 import 'package:supplier/routes/app_routes.dart';
+import 'package:supplier/view/menu/user/navigator.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+class HomeUserPage extends StatelessWidget {
+  const HomeUserPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade300,
-      body: SafeArea(child: MultiProvider(
-        providers: [
-          ChangeNotifierProvider(
-            create: (context) => _ProviderGetData(),
-          ),
-          ChangeNotifierProvider(
-            create: (context) => _ProviderClear(),
-          ),
-        ],
-          child: const _Content())),
+      body: SafeArea(
+          child: MultiProvider(
+              providers: [
+                ChangeNotifierProvider(
+                  create: (context) => ProviderGetData(),
+                ),
+                ChangeNotifierProvider(
+                  create: (context) => ProviderClear(),
+                ),
+              ],
+              child: _HomeUserContent())),
     );
   }
 }
 
-class _Content extends StatefulWidget {
-  const _Content({Key? key}) : super(key: key);
+class _HomeUserContent extends StatefulWidget {
+  const _HomeUserContent({Key? key}) : super(key: key);
 
   @override
-  _ContentState createState() => _ContentState();
+  _HomeUserContentState createState() => _HomeUserContentState();
 }
 
 String token = "";
 
-class _ContentState extends State<_Content> {
-
+class _HomeUserContentState extends State<_HomeUserContent> {
   final _searchController = TextEditingController();
 
   @override
@@ -51,7 +51,7 @@ class _ContentState extends State<_Content> {
     WidgetsBinding.instance!.addPostFrameCallback((_) async {
       await AppSharedPrefs.getToken().then((value) => token = value);
       if (token.isNotEmpty) {
-        await context.read<_ProviderGetData>().setData(context);
+        await context.read<ProviderGetData>().setData(context);
       }
     });
   }
@@ -163,13 +163,13 @@ class _ContentState extends State<_Content> {
           const SizedBox(
             height: 20,
           ),
-          if (context.watch<UserInfoProvider>().userRoleId == 1) _list()
+          if (context.watch<UserInfoProvider>().userRoleId == 2) _user()
         ],
       ),
     );
   }
 
-  Widget _user(){
+  Widget _user() {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
       child: SingleChildScrollView(
@@ -192,13 +192,13 @@ class _ContentState extends State<_Content> {
                     contentPadding: const EdgeInsets.symmetric(horizontal: 20),
                     prefixIcon: const Icon(Icons.search),
                     suffixIcon: Visibility(
-                        visible: context.watch<_ProviderClear>().isShow,
+                        visible: context.watch<ProviderClear>().isShow,
                         child: InkWell(
                           onTap: () {
-                            context.read<_ProviderGetData>().setSearch();
+                            context.read<ProviderGetData>().setSearch();
                             _searchController.text = "";
-                            context.read<_ProviderClear>().setClearData(false);
-                            context.read<_ProviderGetData>().setData(context);
+                            context.read<ProviderClear>().setClearData(false);
+                            context.read<ProviderGetData>().setData(context);
                           },
                           child: const Icon(Icons.close),
                         ))),
@@ -206,10 +206,10 @@ class _ContentState extends State<_Content> {
                 autocorrect: false,
                 onChanged: (value) {
                   if (value.isEmpty) {
-                    context.read<_ProviderClear>().setClearData(false);
-                    context.read<_ProviderGetData>().setData(context);
+                    context.read<ProviderClear>().setClearData(false);
+                    context.read<ProviderGetData>().setData(context);
                   } else {
-                    context.read<_ProviderClear>().setClearData(true);
+                    context.read<ProviderClear>().setClearData(true);
                   }
                 },
               ),
@@ -220,8 +220,9 @@ class _ContentState extends State<_Content> {
       ),
     );
   }
+
   Widget _listContent() {
-    return Consumer<_ProviderGetData>(
+    return Consumer<ProviderGetData>(
       builder: (context, value, child) {
         var rows = value.result;
         bool isBusy = value.isBusy;
@@ -236,10 +237,9 @@ class _ContentState extends State<_Content> {
                   shrinkWrap: true,
                   itemCount: rows.length,
                   itemBuilder: (context, index) {
-                    if(rows[index].stok < 1) {
+                    if (rows[index].stok < 1) {
                       return Container();
-                    }
-                    else{
+                    } else {
                       return Card(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
@@ -258,12 +258,12 @@ class _ContentState extends State<_Content> {
                                       child: Container(
                                         decoration: BoxDecoration(
                                           borderRadius:
-                                          BorderRadius.circular(10),
+                                              BorderRadius.circular(10),
                                           color: Colors.grey,
                                         ),
                                         child: ClipRRect(
                                           borderRadius:
-                                          BorderRadius.circular(10),
+                                              BorderRadius.circular(10),
                                           child: Image.network(
                                               'https://tugaskuy009.000webhostapp.com/tugas/product/images/' +
                                                   rows[index].image,
@@ -277,7 +277,7 @@ class _ContentState extends State<_Content> {
                                           horizontal: 15, vertical: 10),
                                       child: Column(
                                         crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             rows[index].nmbarang.trim(),
@@ -316,7 +316,7 @@ class _ContentState extends State<_Content> {
                                                         textScaleFactor: 1,
                                                         style: GoogleFonts
                                                             .mochiyPopOne(
-                                                            fontSize: 10)),
+                                                                fontSize: 10)),
                                                     Text(
                                                         " Rp. " +
                                                             rows[index]
@@ -325,29 +325,29 @@ class _ContentState extends State<_Content> {
                                                         textScaleFactor: 1,
                                                         style: GoogleFonts
                                                             .mochiyPopOne(
-                                                            fontSize: 10)),
+                                                                fontSize: 10)),
                                                   ],
                                                 ),
                                               ),
                                               Expanded(
                                                   child: Column(
-                                                    children: [
-                                                      Text("Harga Jual:",
-                                                          textScaleFactor: 1,
-                                                          style: GoogleFonts
-                                                              .mochiyPopOne(
+                                                children: [
+                                                  Text("Harga Jual:",
+                                                      textScaleFactor: 1,
+                                                      style: GoogleFonts
+                                                          .mochiyPopOne(
                                                               fontSize: 10)),
-                                                      Text(
-                                                          " Rp. " +
-                                                              rows[index]
-                                                                  .hjual
-                                                                  .toString(),
-                                                          textScaleFactor: 1,
-                                                          style: GoogleFonts
-                                                              .mochiyPopOne(
+                                                  Text(
+                                                      " Rp. " +
+                                                          rows[index]
+                                                              .hjual
+                                                              .toString(),
+                                                      textScaleFactor: 1,
+                                                      style: GoogleFonts
+                                                          .mochiyPopOne(
                                                               fontSize: 10)),
-                                                    ],
-                                                  )),
+                                                ],
+                                              )),
                                             ],
                                           )
                                         ],
@@ -356,18 +356,25 @@ class _ContentState extends State<_Content> {
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: 10,),
+                              const SizedBox(
+                                height: 10,
+                              ),
                               SizedBox(
                                 width: double.infinity,
-                                child: ElevatedButton(onPressed: () {
-                                  // AppDialogs.resultDialog(context: context, title: "Berhasil", message: "Barang berhasil dibeli");
-                                  Navigator.pushNamed(context, AppRoute.rCheckout, arguments: rows[index]);
-
-                                }, child: Text("Beli", style: GoogleFonts.mochiyPopOne(
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white),
-                                  textScaleFactor: 1,)),
+                                child: ElevatedButton(
+                                    onPressed: () {
+                                      // AppDialogs.resultDialog(context: context, title: "Berhasil", message: "Barang berhasil dibeli");
+                                      Navigator.pushNamed(context, AppRoute.rCheckout1, arguments: {"rows" : rows[index]});
+                                      // context.read<ProviderGetData>().getCheckout(rows[index]);
+                                    },
+                                    child: Text(
+                                      "Beli",
+                                      style: GoogleFonts.mochiyPopOne(
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white),
+                                      textScaleFactor: 1,
+                                    )),
                               )
                             ],
                           ));
@@ -390,17 +397,17 @@ class _ContentState extends State<_Content> {
             if (value.filter == "") {
               return const Center(
                   child: Text(
-                    "Belum ada data.",
-                    style: TextStyle(fontFamily: "Rubrik", fontSize: 16),
-                    textScaleFactor: 1,
-                  ));
+                "Belum ada data.",
+                style: TextStyle(fontFamily: "Rubrik", fontSize: 16),
+                textScaleFactor: 1,
+              ));
             } else {
               return Center(
                   child: Text(
-                    "Tidak ada data dengan pencarian '" + value.filter + "'",
-                    style: const TextStyle(fontFamily: "Rubrik", fontSize: 16),
-                    textScaleFactor: 1,
-                  ));
+                "Tidak ada data dengan pencarian '" + value.filter + "'",
+                style: const TextStyle(fontFamily: "Rubrik", fontSize: 16),
+                textScaleFactor: 1,
+              ));
             }
           }
         }
@@ -423,8 +430,25 @@ class _ContentState extends State<_Content> {
             () => Navigator.pushNamed(context, AppRoute.rBarang)),
         _box("User", Icons.person,
             () => Navigator.pushNamed(context, AppRoute.rUser)),
-        _box("Penjualan", Icons.history, () async {
-          Navigator.pushNamed(context, AppRoute.rUadmin);
+        _box("Keluar", Icons.logout, () async {
+          var res = await AppDialogs.confirmDialog(
+              context: context,
+              title: "Logout",
+              message: "Keluar dari aplikasi?",
+              yesButtonLabel: "KELUAR",
+              noButtonLabel: "BATAL");
+          if (res == AppDialogAction.yes) {
+            await AppSharedPrefs.setLogin(false);
+            Navigator.pushReplacementNamed(context, AppRoute.rMain);
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: const Text(
+                'Makasih yaa!',
+                textScaleFactor: 1,
+              ),
+              backgroundColor: Theme.of(context).primaryColor,
+              duration: const Duration(seconds: 1),
+            ));
+          }
         }),
       ],
     );
@@ -457,17 +481,18 @@ class _ContentState extends State<_Content> {
   }
 
   void doSearch() {
-    context.read<_ProviderGetData>().setSearch(_searchController.text);
-    context.read<_ProviderGetData>().setData(context);
+    context.read<ProviderGetData>().setSearch(_searchController.text);
+    context.read<ProviderGetData>().setData(context);
   }
 }
 
-
-class _ProviderGetData with ChangeNotifier {
+class ProviderGetData with ChangeNotifier {
   List<Result> result = [];
   int act = 1;
   String filter = "";
   bool isBusy = false;
+  bool isDisposed = false;
+  List<Result> cBarang = [];
 
   Future<void> setData(BuildContext context, {bool append = false}) async {
     if (isBusy) return;
@@ -491,16 +516,27 @@ class _ProviderGetData with ChangeNotifier {
       result.addAll(model.result);
     }
     isBusy = false;
-    notifyListeners();
+    if (!isDisposed) notifyListeners();
+  }
+
+  void getCheckout(Result cBarang) async {
+    this.cBarang.add(cBarang);
   }
 
   Future<void> setSearch([String searchText = ""]) async {
     filter = searchText;
-    notifyListeners();
+    if (!isDisposed) notifyListeners();
+  }
+
+  //diposer navigator agar tidak eror saat pindah navigator secara cepat
+  @override
+  void dispose() {
+    isDisposed = true;
+    super.dispose();
   }
 }
 
-class _ProviderClear with ChangeNotifier {
+class ProviderClear with ChangeNotifier {
   bool isShow = false;
 
   void setClearData(bool isShow) {
@@ -508,3 +544,4 @@ class _ProviderClear with ChangeNotifier {
     notifyListeners();
   }
 }
+

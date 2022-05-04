@@ -7,6 +7,7 @@ class SharedPrefsConst {
   static const String userName = "username";
   static const String userFullName = "username";
   static const String userRoleId = "idrole";
+  static const String alamat = "alamat";
   static const String userRoleName = "user_role_name";
 
 //etc.

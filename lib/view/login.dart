@@ -290,8 +290,8 @@ class _LoginPageContentState extends State<_LoginPageContent> {
     );
   }
 
-  void submitLogin() {
-    //todo sementara
+  Future<void> submitLogin() async {
+    await AppSharedPrefs.setLogin(true);
     if (_formKey.currentState!.validate()) {
       _apiLogin(
           context,
@@ -311,14 +311,11 @@ class _LoginPageContentState extends State<_LoginPageContent> {
         isDismissible: false);
     try {
       Response response =
-          await Dio().post('https://duplicode.my.id/tugas/login.php',
-              data: params,
-              options: Options(headers: {
-                HttpHeaders.contentTypeHeader: "application/json",
-              }));
+          await Dio().post('https://tugaskuy009.000webhostapp.com/tugas/login.php',
+              data: params);
       var jsonResponse = await response.data;
       var data = jsonResponse;
-      // if (data['result'] != null) {
+      if (data != null) {
       Future.delayed(const Duration(milliseconds: 100), () async {
         AppDialogs.showProgressDialog(
             context: context,
@@ -330,6 +327,7 @@ class _LoginPageContentState extends State<_LoginPageContent> {
       await AppSharedPrefs.setLogin(true);
       await AppSharedPrefs.setToken(data['token']);
       await AppSharedPrefs.setString(SharedPrefsConst.userName, data['nmrole']);
+      await AppSharedPrefs.setString(SharedPrefsConst.alamat, data['alamat']);
       await AppSharedPrefs.setInt(
           SharedPrefsConst.userRoleId, int.parse(data['idrole']));
       if (context.read<_LoginPageProvider>().checked) {
@@ -346,16 +344,16 @@ class _LoginPageContentState extends State<_LoginPageContent> {
         AppDialogs.hideProgressDialog();
         Navigator.pushReplacementNamed(context, AppRoute.rMain);
       });
-      // }
-      // else {
-      //   await CsiDialogs.resultDialog(
-      //       context: context,
-      //       title: "Error",
-      //       message:
-      //           "Login gagal silahkan cek kembali password dan username anda",
-      //       dialogType: CsiDialogType.error);
-      //   CsiDialogs.hideProgressDialog();
-      // }
+      }
+      else {
+        await AppDialogs.resultDialog(
+            context: context,
+            title: "Error",
+            message:
+                "Login gagal silahkan cek kembali password dan username anda",
+            dialogType: AppDialogType.error);
+        AppDialogs.hideProgressDialog();
+      }
     } catch (e) {
       AppDialogs.resultDialog(
           context: context,

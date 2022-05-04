@@ -1,7 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:supplier/main.dart';
+import 'package:supplier/view/menu/barang/add_barang.dart';
 import 'package:supplier/view/home.dart';
 import 'package:supplier/view/login.dart';
+import 'package:supplier/view/menu/barang/penjualan.dart';
+import 'package:supplier/view/menu/barang/screen_barang.dart';
+import 'package:supplier/view/menu/barang/update_barang.dart';
+import 'package:supplier/view/menu/kategori/screen_kategori.dart';
+import 'package:supplier/view/menu/user/chekcout.dart';
+import 'package:supplier/view/menu/user/home_user.dart';
+import 'package:supplier/view/menu/user/navigator.dart';
+import 'package:supplier/view/menu/user/new_checkout.dart';
+import 'package:supplier/view/menu/user/screen_user.dart';
 
 ///Routing with defined name
 class AppRoute {
@@ -10,21 +20,16 @@ class AppRoute {
   static const rHome = '/home';
   static const rRegister = '/register';
   static const rLogin = '/login';
-  static const rListEvent = '/listevent';
-  static const rAddEvent = '/addevent';
-  static const rMaps = '/maps';
-  static const rNEvent = '/nevent';
-  static const rHEvent = '/hevent';
-  static const rLEPetugas = '/lepetugas';
-  static const rCreateSesi = '/creatsesi';
-  static const rSettingEvent = '/settingevent';
-  static const rStartevent = '/startevent';
-  static const rHSesi = '/historysesi';
-  static const rListSesi = '/listsesi';
-  static const rListUndian = '/listundian';
-  static const rVhadiah = '/verifikasihadiah';
-  static const rPreview = '/preview';
-  static const rLPeserta = '/listpeserta';
+  static const rBarang = '/barang';
+  static const rAddBarang = '/addbarang';
+  static const rUpdateBarang = '/updatebarang';
+  static const rKategori = '/kategori';
+  static const rUser = '/user';
+  static const rCheckout = '/checkout';
+  static const rCheckout1 = '/checkout1';
+  static const rNav = '/nav';
+  static const rUpage = '/upage';
+  static const rUadmin = '/uadmin';
 
   /// Route list
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -35,6 +40,26 @@ class AppRoute {
         return _buildRoute(settings, const HomePage());
       case rLogin:
         return _buildRoute(settings, const LoginPage());
+      case rBarang:
+        return _buildRoute(settings, const ScreenBarangPage());
+      case rAddBarang:
+        return _buildRoute(settings, const AddBarangPage());
+      case rUpdateBarang:
+        return _buildRoute(settings, const UpdateBarangPage());
+      case rKategori:
+        return _buildRoute(settings, const KategoriPage());
+      case rUser:
+        return _buildRoute(settings, const UserPage());
+      case rCheckout:
+        return _buildRoute(settings, const CPage());
+      case rNav:
+        return _buildRoute(settings, const NavPage());
+      case rCheckout1:
+        return _buildRoute(settings, const CNewPage());
+      case rUpage:
+        return _buildRoute(settings, const HomeUserPage());
+      case rUadmin:
+        return _buildRoute(settings, const HAdminPage());
 
 
 

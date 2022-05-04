@@ -1,5 +1,6 @@
 
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:supplier/model/master_model.dart';
 
 import '../constant/shared_prefs_const.dart';
 
@@ -21,10 +22,6 @@ class AppSharedPrefs {
   static Future<bool> setBool(String key, bool value) async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.setBool(key, value);
-  }
-  static Future<bool> setStringList(String key, List<String> value) async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.setStringList(key, value);
   }
 
   //get prefs value

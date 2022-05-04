@@ -59,6 +59,7 @@ class _MainPageState extends State<MainPage> {
 Future<void> _requestPermission(BuildContext context) async {
   Map<Permission, PermissionStatus> statuses = await [
     Permission.storage,
+    Permission.camera,
   ].request();
     _toPage(context);
 
@@ -71,7 +72,11 @@ Future<void> _toPage(BuildContext context) async{
     if(login){
       context.read<UserInfoProvider>().setUserInfo();
       Future.delayed(const Duration(milliseconds: 200), () async {
-        Navigator.pushReplacementNamed(context, AppRoute.rHome);
+        if(context.read<UserInfoProvider>().userRoleId == 1) {
+          Navigator.pushReplacementNamed(context, AppRoute.rHome);
+        }else{
+          Navigator.pushReplacementNamed(context, AppRoute.rNav);
+        }
       });
     }else{
       Navigator.pushReplacementNamed(context, AppRoute.rLogin);

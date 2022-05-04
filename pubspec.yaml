@@ -62,7 +62,12 @@ dependencies:
   # font awesome icon
   font_awesome_flutter: ^9.1.0
 
+  cached_network_image: ^3.2.0
 
+  image_picker: ^0.8.5
+  file_picker: ^4.5.1
+
+  flutter_slidable: ^1.2.0
 
 
   # The following adds the Cupertino Icons font to your application.

@@ -11,5 +11,6 @@ class AppSettings{
   static const String assetsDir = "assets/";
   static const String assetsImagesDir = "assets/images/";
   static const String assetsImagesDirApp = "assets/images/app/";
+  static const String apiUrlFile = apiBaseUrl+"file/preview?fileid=";
 
 }

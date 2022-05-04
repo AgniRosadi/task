@@ -24,6 +24,7 @@ class Result {
     required this.stok,
     required this.idkat,
     required this.nmkat,
+    required this.image,
   });
   late final String idbarang;
   late final String nmbarang;
@@ -32,6 +33,7 @@ class Result {
   late final int stok;
   late final String idkat;
   late final String nmkat;
+  late final String image;
 
   Result.fromJson(Map<String, dynamic> json){
     idbarang = json['idbarang'] ?? "";
@@ -41,6 +43,7 @@ class Result {
     stok = json['stok'] ?? 0;
     idkat = json['idkat'] ?? "";
     nmkat = json['nmkat'] ?? "";
+    image = json['image'] ?? "";
   }
 
   Map<String, dynamic> toJson() {
@@ -52,6 +55,7 @@ class Result {
     _data['stok'] = stok;
     _data['idkat'] = idkat;
     _data['nmkat'] = nmkat;
+    _data['image'] = image;
     return _data;
   }
 }
